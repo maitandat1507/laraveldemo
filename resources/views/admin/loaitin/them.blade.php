@@ -25,7 +25,7 @@
             @endif
 
                 <form action="admin/loaitin/them" method="post">
-                    <input type="hidden" name="_token" value="{{csrf_token()}}">
+                    {{-- <input type="hidden" name="_token" value="{{csrf_token()}}"> --}}
                     <div class="form-group">
                         <label>Thể loại</label>
                         <select class="form-control" name="TheLoai">

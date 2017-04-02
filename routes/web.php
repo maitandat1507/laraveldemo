@@ -77,3 +77,5 @@ Route::group(['prefix' => 'admin'], function() {
         Route::get('sua', 'UserController@getSua');
     });
 });
+
+Route::get('test', 'TestController@testYaml');

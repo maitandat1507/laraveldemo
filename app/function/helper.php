@@ -1,12 +1,6 @@
 <?php
 
-// Mở composer.json
-// Thêm vào trong "autoload" chuỗi sau
-// "files": [
-//         "app/function/function.php"
-// ]
-
-// Chạy cmd : composer  dumpautoload
+use Symfony\Component\Yaml\Yaml;
 
 function changeTitle($str,$strSymbol='-',$case=MB_CASE_LOWER){// MB_CASE_UPPER / MB_CASE_TITLE / MB_CASE_LOWER
 	$str=trim($str);
@@ -75,4 +69,37 @@ function stripUnicode($str){
 		$str = str_replace($arr,$khongdau,$str);
 	}
 	return $str;
+}
+
+if (!function_exists('meta')) {
+	function meta($page_name, $params) {
+		extract((array) $params);
+
+        $yaml = new Yaml();
+        $content = file_get_contents(METATAG_PC_PATH);
+        $meta = $yaml->parse($content);
+
+        if (is_array($meta[$page_name])) {
+            foreach ($meta[$page_name] as $key => $val) {
+                // have no case
+                if (is_string($val)) {
+                    eval("\$val = \"$val\";");
+                    $meta[$page_name][$key] = $val;
+                } elseif (is_array($val) && $key == $case) { //have case
+                    unset($meta[$page_name]);
+                    foreach ($val as $k => $v) {
+                        eval("\$v = \"$v\";");
+                        $meta[$page_name][$k] = $v;
+                    }
+                }
+            }
+        }
+
+        return array_merge([
+            'h1' => '',
+            'title' => '',
+            'description' => '',
+            'h2' => '',
+        ], $meta[$page_name]);
+	}
 }
